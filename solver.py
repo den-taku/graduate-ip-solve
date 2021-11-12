@@ -7,7 +7,7 @@ path = "../graduate-second/second/testcase/5_3_40_15_30/testcase"
 # path = "../second/testcase/3_3_20_7_0/testcase"
 # path = "test"
 
-result_path = "resultsx100"
+result_path = "results"
 result_file = open(result_path, 'w')
 datalist = []
 
