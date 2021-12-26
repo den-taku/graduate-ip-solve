@@ -1,9 +1,9 @@
 from mip import Model, minimize, BINARY, xsum, OptimizationStatus
 import sys
 
-# path = "../second/testcase/4_3_30_15_30/testcase"
-# path = "../second/testcase/3_3_20_10_30_x100/testcase"
-path = "../graduate-second/second/testcase/5_3_40_15_30/testcase"
+# path = "../graduate-second/second/testcase/4_3_30_15_30/testcase"
+path = "../graduate-second/second/testcase/3_3_20_10_30_x100/testcase"
+# path = "../graduate-second/second/testcase/5_3_40_15_30/testcase"
 # path = "../second/testcase/3_3_20_7_0/testcase"
 # path = "test"
 
@@ -179,7 +179,7 @@ for test_number in range(20):
                         solver.add_constr(b[i][j][n][t] + xsum(v[block][t]
                                           for block in range(n)) - n <= y[i][j][n][t] + xsum(a[stack][tier][block][t] for stack in range(stack_size) for tier in range(tier_size) for block in range(blocks)))
 
-    status = solver.optimize()
+    status = solver.optimize(max_seconds=18000)
 
     print("\n{}\n".format(solver.status))
     if solver.status == OptimizationStatus.OPTIMAL:
@@ -196,10 +196,12 @@ for test_number in range(20):
                                     ans += 1
         print("ans: {}\n".format(ans))
         datalist.append("{}\n".format(ans))
-    else:
+    elif solver.status == OptimizationStatus.INFEASIBLE:
         datalist.append("INFEASIBLE\n")
+    else:
+        datalist.append("FAIL\n")
 
-    solver.write('models/model{}.lp'.format(test_number))
+    # solver.write('models/model{}.lp'.format(test_number))
 
     if test_number % 5 == 4:
         datalist.append('\n')
