@@ -4,7 +4,7 @@ import sys
 # path = "../graduate-second/second/testcase/4_3_30_15_30/testcase"
 path = "../graduate-second/second/testcase/3_3_20_10_30_x100/testcase"
 # path = "../graduate-second/second/testcase/5_3_40_15_30/testcase"
-# path = "../second/testcase/3_3_20_7_0/testcase"
+# path = "../graduate-second/second/testcase/3_3_20_7_0/testcase"
 # path = "test"
 
 result_path = "results"
