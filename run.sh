@@ -115,10 +115,10 @@ while ( $i <= $TESTS_LEN )
 
     # 解く種類を指定
 
-    # mkdir -p results/forced_immediate/$INSTANCE
+    mkdir -p results/forced_immediate/$INSTANCE
     # mkdir -p results/forced_delay/$TESTS[$i]
     # mkdir -p results/voluntary_immediate/$TESTS[$i]
-    mkdir -p results/voluntary_delay/$TESTS[$i]
+    # mkdir -p results/voluntary_delay/$TESTS[$i]
 
     # cargo build --release
 
@@ -126,14 +126,15 @@ while ( $i <= $TESTS_LEN )
     while ( $TESTCASE < $TESTSIZE )
         # TESTCASE番目のインスタンスが解かれる
 
-        # ./target/release/bin ForcedImmediate $INSTANCE $TESTCASE $TIME_LIMIT
+        python3 solver.py 1 1 $TESTS[$i] $TESTCASE $TIME_LIMIT
         # ./target/release/bin ForcedDelay $TESTS[$i] $TESTCASE $TIME_LIMIT
         # ./target/release/bin VoluntaryImmediate $TESTS[$i] $TESTCASE $TIME_LIMIT
-        python3 solver.py 2 2 $TESTS[$i] $TESTCASE $TIME_LIMIT
+        # python3 solver.py 2 2 $TESTS[$i] $TESTCASE $TIME_LIMIT
         @ TESTCASE = $TESTCASE + 1
     end
     cd graduate-bencher
-    cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
+    cargo run --release ../results/forced_immediate/$INSTANCE $TESTSIZE
+    # cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
     cd ..
     @ i = $i + 1
 end

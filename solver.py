@@ -76,6 +76,19 @@ y = [[[[solver.add_var('y({},{},{},{})'.format(i, j, n, t), var_type=BINARY) for
 # block n is retrieved before t
 v = [[solver.add_var('v({},{})'.format(n, t), var_type=BINARY)
       for t in range(horizon + 1)] for n in range(blocks)]
+# block n has been already retrieved or not yet arrived when Σi=1..n-1 p[i][t] == n - 1, p[n][t] == 1
+p = [[solver.add_var('p({},{})'.format(n, t), var_type=BINARY)
+      for t in range(horizon + 1)] for n in range(blocks)]
+# block n is the target at t
+w = [[solver.add_var('w({},{})'.format(n, t), var_type=BINARY)
+      for t in range(horizon + 1)] for n in range(blocks)]
+# stask s has the target at t
+z = [[solver.add_var('z({},{})'.format(i, t), var_type=BINARY)
+      for t in range(horizon + 1)] for i in range(stack_size)]
+# c = b[i][j][n][t] and w[n][t]
+c = [[[[solver.add_var('c({},{},{},{})'.format(i, j, n, t), var_type=BINARY) for t in range(
+    horizon + 1)] for n in range(blocks)] for j in range(tier_size)] for i in range(stack_size)]
+
 # variables' constraint
 # for a
 for n in range(blocks):
@@ -192,7 +205,49 @@ if i_or_d == "1":
                                           for block in range(n)) - n <= y[i][j][n][t] + xsum(a[stack][tier][block][t] for stack in range(stack_size) for tier in range(tier_size) for block in range(blocks)))
 
 if f_or_v == "1":
-    print("forced")
+    # variables' constraint
+    # for p
+    for n in range(blocks):
+        for t in range(expecteds[n] + 1):
+            if arrivings[n] >= t:
+                solver.add_constr(p[n][t] == v[n][t])
+            elif n == 1:
+                solver.add_constr(p[n][t] == 1)
+            else:
+                solver.add_constr(p[n][t] == p[n - 1][t])
+    # for w
+    for n in range(blocks):
+        for t in range(expecteds[n] + 1):
+            solver.add_constr(xsum(p[n][t] for n in range(
+                blocks)) - n <= blocks * (1 - w[n][t]))
+            solver.add_constr(
+                n - xsum(p[n][t] for n in range(blocks)) <= blocks * (1 - w[n][t]))
+    # for c
+    for i in range(stack_size):
+        for j in range(tier_size):
+            for n in range(blocks):
+                for t in range(horizon + 1):
+                    solver.add_constr(
+                        0 <= b[i][j][n][t] + w[n][t] - 2 * c[i][j][n][t])
+                    solver.add_constr(b[i][j][n][t] + w[n]
+                                      [t] - 2 * c[i][j][n][t] <= 1)
+    # for z
+    for i in range(stack_size):
+        for t in range(expecteds[n] + 1):
+            solver.add_constr(0 <= tier_size * blocks * z[i][t] - xsum(
+                c[i][j][n][t] for j in range(tier_size) for n in range(blocks)))
+            solver.add_constr(tier_size * blocks * z[i][t] - xsum(
+                c[i][j][n][t] for j in range(tier_size) for n in range(blocks)) <= 1)
+
+    # 11. Relocations are operated from only target stack
+    for i in range(stack_size):
+        for j in range(tier_size):
+            for k in range(stack_size):
+                for l in range(tier_size):
+                    for n in range(blocks):
+                        for t in range(horizon + 1):
+                            solver.add_constr(
+                                z[i][t] - x[i][j][k][l][n][t] >= 0)
 
 start = timer.time()
 status = solver.optimize(max_seconds=int(time_limit))
