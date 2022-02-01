@@ -2,14 +2,7 @@ from mip import Model, minimize, BINARY, xsum, OptimizationStatus
 import sys
 import time as timer
 
-# path = "../graduate-second/second/testcase/4_3_30_15_30/testcase"
-# path = "../graduate-second/second/testcase/3_3_20_10_30_x100/testcase"
-# path = "../graduate-second/second/testcase/5_3_40_15_30/testcase"
-# path = "../graduate-second/second/testcase/3_3_20_7_0/testcase"
-# path = "test"
 path = "../graduate-second/second/testcase/"
-
-# datalist = []
 
 # run `python3 solver.py ForV IorD TESTNAME TESTCASE_INDEX TIME_LIMIT`
 # 1: Forced, 2: Voluntary
@@ -236,10 +229,6 @@ if f_or_v == "1":
         for t in range(expecteds[n] + 1):
             solver.add_constr(z[i][t] <= xsum(c[i][j][n][t]
                               for j in range(tier_size) for n in range(blocks)))
-            # solver.add_constr(0 <= tier_size * blocks * z[i][t] - xsum(
-            #     c[i][j][n][t] for j in range(tier_size) for n in range(blocks)))
-            # solver.add_constr(tier_size * blocks * z[i][t] - xsum(
-            #     c[i][j][n][t] for j in range(tier_size) for n in range(blocks)) <= 1)
 
     # 11. Relocations are operated from only target stack
     for i in range(stack_size):
@@ -294,8 +283,5 @@ elif solver.status == OptimizationStatus.INFEASIBLE:
 else:
     datalist.append("1 0 123456789 0 123456789 None None 0 0\n")
 
-# solver.write('models/model{}.lp'.format(test_number))
-
-# end
 result_file.writelines(datalist)
 result_file.close()

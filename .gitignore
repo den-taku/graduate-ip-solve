@@ -2,5 +2,6 @@ models
 past_results
 .DS_Store
 graduate-bencher
+graduate-checker
 results
 config
