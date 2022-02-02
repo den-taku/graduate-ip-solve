@@ -12,7 +12,7 @@ mkdir -p results/dfs
 
 # conditions
 set TESTSIZE = 100
-set TIME_LIMIT = 1800000
+set TIME_LIMIT = 1800
 
 # for simulation setting
 set TESTS = (\
