@@ -244,7 +244,7 @@ start = timer.time()
 status = solver.optimize(max_seconds=int(time_limit))
 end = timer.time()
 
-time = int(end - start)
+time = int(end - start) * 1000
 
 # oom time_limit time feasible relocations lb ub nodes cached
 print("\n{}\n".format(solver.status))
