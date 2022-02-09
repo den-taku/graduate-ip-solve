@@ -1,6 +1,6 @@
 #! /bin/tcsh -f
 
-# set path = (/sbin /bin /usr/sbin /usr/bin /usr/local/sbin /usr/local/bin $HOME/bin $HOME/.cargo/bin)
+set path = (/sbin /bin /usr/sbin /usr/bin /usr/local/sbin /usr/local/bin $HOME/bin $HOME/.cargo/bin)
 
 # for setting up
 mkdir -p results
@@ -37,8 +37,8 @@ set TESTS = (\
 # "4_4_40_15_10_x100"\
 # "4_4_40_15_30_x100"\
 # \
-"4_4_50_20_10_x100"\
-\
+# "4_4_50_20_10_x100"\
+# \
 # "5_3_20_10_10_x100"\
 # "5_3_20_10_30_x100"\
 # "5_3_30_13_10_x100"\
@@ -57,8 +57,8 @@ set TESTS = (\
 # "6_4_40_15_30_x100"\
 # "6_4_50_20_10_x100"\
 # "6_4_50_20_30_x100"\
-# "6_4_60_25_10_x100"\
-# "6_4_60_25_30_x100"\
+"6_4_60_25_10_x100"\
+"6_4_60_25_30_x100"\
 # "6_5_70_30_10_x100"\
 # "6_5_70_30_30_x100"\
 )
@@ -70,10 +70,10 @@ while ( $i <= $#TESTS )
 
     # 解く種類を指定
 
-    mkdir -p results/forced_immediate/$INSTANCE
-    mkdir -p results/forced_delay/$INSTANCE
-    # mkdir -p results/voluntary_immediate/$INSTANCE
-    # mkdir -p results/voluntary_delay/$INSTANCE
+    # mkdir -p results/forced_immediate/$INSTANCE
+    # mkdir -p results/forced_delay/$INSTANCE
+    mkdir -p results/voluntary_immediate/$INSTANCE
+    mkdir -p results/voluntary_delay/$INSTANCE
 
     # cargo build --release
 
@@ -81,23 +81,23 @@ while ( $i <= $#TESTS )
     while ( $TESTCASE < $TESTSIZE )
         # TESTCASE番目のインスタンスが解かれる
 
-        python3 solver.py 1 1 $TESTS[$i] $TESTCASE $TIME_LIMIT
-        python3 solver.py 1 2 $TESTS[$i] $TESTCASE $TIME_LIMIT
-        # python3 solver.py 2 1 $TESTS[$i] $TESTCASE $TIME_LIMIT
-        # python3 solver.py 2 2 $TESTS[$i] $TESTCASE $TIME_LIMIT
+        # python3 solver.py 1 1 $TESTS[$i] $TESTCASE $TIME_LIMIT
+        # python3 solver.py 1 2 $TESTS[$i] $TESTCASE $TIME_LIMIT
+        python3 solver.py 2 1 $TESTS[$i] $TESTCASE $TIME_LIMIT
+        python3 solver.py 2 2 $TESTS[$i] $TESTCASE $TIME_LIMIT
         @ TESTCASE = $TESTCASE + 1
     end
     cd graduate-bencher
-    cargo run --release ../results/forced_immediate/$INSTANCE $TESTSIZE
-    cargo run --release ../results/forced_delay/$INSTANCE $TESTSIZE
-    # cargo run --release ../results/voluntary_immediate/$INSTANCE $TESTSIZE
-    # cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
+    # cargo run --release ../results/forced_immediate/$INSTANCE $TESTSIZE
+    # cargo run --release ../results/forced_delay/$INSTANCE $TESTSIZE
+    cargo run --release ../results/voluntary_immediate/$INSTANCE $TESTSIZE
+    cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
     cd ..
     cd graduate-checker
-    cargo run --release ../results/forced_immediate/$INSTANCE $TESTSIZE
-    cargo run --release ../results/forced_delay/$INSTANCE $TESTSIZE
-    # cargo run --release ../results/voluntary_immediate/$INSTANCE $TESTSIZE
-    # cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
+    # cargo run --release ../results/forced_immediate/$INSTANCE $TESTSIZE
+    # cargo run --release ../results/forced_delay/$INSTANCE $TESTSIZE
+    cargo run --release ../results/voluntary_immediate/$INSTANCE $TESTSIZE
+    cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
     cd ..
     @ i = $i + 1
 end

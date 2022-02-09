@@ -17,6 +17,7 @@ time_limit = args[5]
 
 # for test_number in range(100):
 print("solve {}\n".format(test_index))
+print(str(test_name) + "/testcase" + test_index, file=sys.stderr)
 
 # manage input
 f = open(path + str(test_name) + "/testcase" + test_index, 'r')
