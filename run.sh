@@ -16,46 +16,45 @@ set TIME_LIMIT = 1800
 
 # for simulation setting
 set TESTS = (\
-# "3_3_20_10_10_x100"\
-# "3_3_20_10_30_x100"\
-# "3_3_30_13_10_x100"\
-# "3_3_30_13_30_x100"\
-# "3_3_40_15_10_x100"\
-# "3_3_40_15_30_x100"\
-# \
-# "4_3_20_10_10_x100"\
-# "4_3_20_10_30_x100"\
-# "4_3_30_13_10_x100"\
-# "4_3_30_13_30_x100"\
-# "4_3_40_15_10_x100"\
-# "4_3_40_15_30_x100"\
-# \
-# "4_4_20_10_10_x100"\
-# "4_4_20_10_30_x100"\
-# "4_4_30_13_10_x100"\
-# "4_4_30_13_30_x100"\
-# "4_4_40_15_10_x100"\
-# "4_4_40_15_30_x100"\
-# \
-# "4_4_50_20_10_x100"\
-# \
-# "5_3_20_10_10_x100"\
-# "5_3_20_10_30_x100"\
-# "5_3_30_13_10_x100"\
-# "5_3_30_13_30_x100"\
-# "5_3_40_15_10_x100"\
-# "5_3_40_15_30_x100"\
-# \
-# "6_3_20_10_10_x100"\
-# "6_3_20_10_30_x100"\
-# "6_3_30_13_10_x100"\
-# "6_3_30_13_30_x100"\
-# "6_3_40_15_10_x100"\
-# "6_3_40_15_30_x100"\
-# \
-# "6_4_40_15_10_x100"\
-# "6_4_40_15_30_x100"\
-# reverse\
+"3_3_20_10_10_x100"\
+"3_3_20_10_30_x100"\
+"3_3_30_13_10_x100"\
+"3_3_30_13_30_x100"\
+"3_3_40_15_10_x100"\
+"3_3_40_15_30_x100"\
+\
+"4_3_20_10_10_x100"\
+"4_3_20_10_30_x100"\
+"4_3_30_13_10_x100"\
+"4_3_30_13_30_x100"\
+"4_3_40_15_10_x100"\
+"4_3_40_15_30_x100"\
+\
+"4_4_20_10_10_x100"\
+"4_4_20_10_30_x100"\
+"4_4_30_13_10_x100"\
+"4_4_30_13_30_x100"\
+"4_4_40_15_10_x100"\
+"4_4_40_15_30_x100"\
+\
+"4_4_50_20_10_x100"\
+\
+"5_3_20_10_10_x100"\
+"5_3_20_10_30_x100"\
+"5_3_30_13_10_x100"\
+"5_3_30_13_30_x100"\
+"5_3_40_15_10_x100"\
+"5_3_40_15_30_x100"\
+\
+"6_3_20_10_10_x100"\
+"6_3_20_10_30_x100"\
+"6_3_30_13_10_x100"\
+"6_3_30_13_30_x100"\
+"6_3_40_15_10_x100"\
+"6_3_40_15_30_x100"\
+\
+"6_4_40_15_10_x100"\
+"6_4_40_15_30_x100"\
 "6_5_70_30_10_x100"\
 "6_4_50_20_10_x100"\
 "6_4_50_20_30_x100"\
@@ -74,10 +73,8 @@ while ( $i <= $#TESTS )
 
     mkdir -p results/forced_immediate/$INSTANCE
     mkdir -p results/forced_delay/$INSTANCE
-    # mkdir -p results/voluntary_immediate/$INSTANCE
-    # mkdir -p results/voluntary_delay/$INSTANCE
-
-    # cargo build --release
+    mkdir -p results/voluntary_immediate/$INSTANCE
+    mkdir -p results/voluntary_delay/$INSTANCE
 
     set TESTCASE = 0
     while ( $TESTCASE < $TESTSIZE )
@@ -85,21 +82,21 @@ while ( $i <= $#TESTS )
 
         python3 solver.py 1 1 $TESTS[$i] $TESTCASE $TIME_LIMIT
         python3 solver.py 1 2 $TESTS[$i] $TESTCASE $TIME_LIMIT
-        # python3 solver.py 2 1 $TESTS[$i] $TESTCASE $TIME_LIMIT
-        # python3 solver.py 2 2 $TESTS[$i] $TESTCASE $TIME_LIMIT
+        python3 solver.py 2 1 $TESTS[$i] $TESTCASE $TIME_LIMIT
+        python3 solver.py 2 2 $TESTS[$i] $TESTCASE $TIME_LIMIT
         @ TESTCASE = $TESTCASE + 1
     end
     cd graduate-bencher
     cargo run --release ../results/forced_immediate/$INSTANCE $TESTSIZE
     cargo run --release ../results/forced_delay/$INSTANCE $TESTSIZE
-    # cargo run --release ../results/voluntary_immediate/$INSTANCE $TESTSIZE
-    # cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
+    cargo run --release ../results/voluntary_immediate/$INSTANCE $TESTSIZE
+    cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
     cd ..
     cd graduate-checker
     cargo run --release ../results/forced_immediate/$INSTANCE $TESTSIZE
     cargo run --release ../results/forced_delay/$INSTANCE $TESTSIZE
-    # cargo run --release ../results/voluntary_immediate/$INSTANCE $TESTSIZE
-    # cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
+    cargo run --release ../results/voluntary_immediate/$INSTANCE $TESTSIZE
+    cargo run --release ../results/voluntary_delay/$INSTANCE $TESTSIZE
     cd ..
     @ i = $i + 1
 end
