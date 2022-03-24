@@ -1,4 +1,4 @@
-from mip import Model, minimize, BINARY, xsum, OptimizationStatus
+from mip import Model, minimize, BINARY, xsum, OptimizationStatus, GUROBI
 import sys
 import time as timer
 
@@ -52,7 +52,7 @@ print(arrivings)
 print(expecteds)
 
 # model
-solver = Model("DBRP")
+solver = Model(name="DBRP", solver_name=GUROBI)
 
 # variables
 # block n is placed in slot (i, j) in a(n)
